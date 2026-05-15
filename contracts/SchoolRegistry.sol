@@ -41,7 +41,7 @@ contract SchoolRegistry{
         require(teacherWallet != address(0), "Invalid address");
         require(!isTeacher[teacherWallet], "already a teacher");
 
-        (bool success, ) = teacherContract.call(abi.encodeSignature(
+        (bool success, ) = teacherContract.call(abi.encodeWithSignature(
             "registerTeacher(address, string, uint256)",
             teacherWallet,
             name,
@@ -56,7 +56,7 @@ contract SchoolRegistry{
     function deactivateTeacher(address teacherWallet) external onlyAdmin {
         require(isTeacher[teacherWallet], "Not a Teacher");
 
-        (bool success, ) = teacherContract.call(abi.encodeSignature(
+        (bool success, ) = teacherContract.call(abi.encodeWithSignature(
             "deactivateTeacher(address)",
             teacherWallet
         ));
@@ -70,7 +70,7 @@ contract SchoolRegistry{
         require(studentWallet != address(0), "Invalid address");
         require(isStudent[studentWallet], "Already enrolled");
 
-        (bool success, ) = studentContract.call(abi.encodeSignature(
+        (bool success, ) = studentContract.call(abi.encodeWithSignature(
             "enrollStudent(address, string, uint256)",
               studentWallet,
               name,
