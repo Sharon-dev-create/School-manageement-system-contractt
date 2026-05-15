@@ -53,20 +53,20 @@ contract SchoolRegistry{
         emit TeacherRegistered(teacherWallet, subjectId);
     }
 
-    function deactivateTeacher(address wallet) external onlyAdmin {
+    function deactivateTeacher(address teacherWallet) external onlyAdmin {
         require(isTeacher[teacherWallet], "Not a Teacher");
 
         (bool success, ) = teacherContract.call(abi.encodeSignature(
             "deactivateTeacher(address)",
             teacherWallet
         ));
-        require(sucess, "Teacher deactivation failed");
+        require(success, "Teacher deactivation failed");
 
         isTeacher[teacherWallet] = false;
         emit TeacherDeactivated(teacherWallet);
     }
 
-    function enrollStudent(uint256 courseId, address studentWallet, student calldata name) external onlyAdmin{
+    function enrollStudent(uint256 courseId, address studentWallet, string calldata name) external onlyAdmin{
         require(studentWallet != address(0), "Invalid address");
         require(isStudent[studentWallet], "Already enrolled");
 
