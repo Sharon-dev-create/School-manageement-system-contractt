@@ -25,7 +25,7 @@ contract teacherContract{
     // Mappings
     mapping(address => Teacher) public teachers;
 
-    // Functions
+    // Functions 
     // Register teacher
 
     // Assign subject and class

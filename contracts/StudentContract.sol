@@ -42,8 +42,8 @@ contract studentContract{
 
     // Functions
     // Register students
-    function registerStudent(uint256 _studentId, string memory name,
-    uint256 class, )
+    // function registerStudent(uint256 _studentId, string memory name,
+    // uint256 class ) public 
     // Update student info
     // Suspend student
     // Return student
