@@ -16,8 +16,8 @@ contract studentContract{
     
     // Enums
     enum {
-        Absent,
-        Present
+        isEnrolled,
+        isGraduated
     }
 
     // Events

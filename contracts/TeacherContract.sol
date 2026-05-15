@@ -10,10 +10,16 @@ contract teacherContract{
     struct Teacher{
         uint256 teacherId;
         string teacherName;
+        bool isActive;
         
     }
 
     // Events
+    // event for teacherRegistered
+    // event for teacherDeactivated
+    // event for teacherReactivated
+    // event for subjectAssigned
+    // event for attendanceMarked
         
     // Mappings
     mapping(address => Teacher) public teachers;
@@ -21,13 +27,17 @@ contract teacherContract{
     // Functions
     // Register teacher
 
+    // Assign subject and class
+
     // Deactivate teacher
+
+    // Reactivate teacher
 
     // Mark attendance
 
     // update grades
 
-    // Deactivate teacher
+    
 
     // Getter functions
     /// Get teacher info
