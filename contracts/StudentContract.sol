@@ -6,18 +6,30 @@ contract studentContract{
     // State variables
 
     // Struct
-    struct student{
+    struct Student{
         uint256 sudentId;
         uint256 class;
         uint256 grade;
         string name;
-        address student;
+        bool isEnrolled;
+        bool isGraduated;
+        bool isSuspended;
+        bytes32 certificate;
+        AttendanceRecord[] attendance;
+        Result[] results;
     }
     
-    // Enums
-    enum {
-        isEnrolled,
-        isGraduated
+    struct Result {
+    uint256 subjectId;
+    uint8 score;
+    address gradedBy;
+    uint256 timestamp;
+   }
+
+    struct AttendanceRecord {
+    uint256 date;
+    bool present;
+    address markedBy;
     }
 
     // Events
@@ -29,10 +41,12 @@ contract studentContract{
     // only Teacher modifier
 
     // Functions
-
     // Register students
+    function registerStudent(uint256 _studentId, string memory name,
+    uint256 class, )
     // Update student info
-    // deactivate student
+    // Suspend student
+    // Return student
     // Reactivate 
 
 

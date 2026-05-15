@@ -9,9 +9,10 @@ contract teacherContract{
     // Struct
     struct Teacher{
         uint256 teacherId;
+        uint256 classId;
+        uint256 gradeSubmitted;
         string teacherName;
-        bool isActive;
-        
+        bool isActive;     
     }
 
     // Events
