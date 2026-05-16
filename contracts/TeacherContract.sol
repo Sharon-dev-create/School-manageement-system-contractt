@@ -115,7 +115,12 @@ contract teacherContract {
 
     // Admin Utility
     function setRegistry(address _registry) external onlyRegistry{
-        
+        require(_registry != address(0), "Invalid address");
+        registry = _registry;
     }
-
+    
+    function setStudentContract(address _studentContract) external onlyRegistry {
+        require(_studentContract != address(0), "Invalid address");
+        studentContract = _studentContract;
+    }
 }
