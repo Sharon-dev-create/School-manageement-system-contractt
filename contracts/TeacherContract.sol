@@ -96,15 +96,26 @@ contract teacherContract {
 
         emit AttendanceMarked(msg.sender, student, present, date);
     }
+   
 
-    // update grades
-
-    
-
-    // Getter functions
+    // Getter/ View functions
     /// Get teacher info
+    function getTeacher(address teacherWallet) external view returns(Teacher memory){
+        return teachers[teacherWallet];
+    }
 
-    
+    function isActiveTeacher(address teacherWallet) external view returns(bool){
+        return teachers[teacherWallet].isActive;
 
+    }  
+
+    function getAllTeachers() external view returns(uint256) {
+        return teacherList.length;
+    }
+
+    // Admin Utility
+    function setRegistry(address _registry) external onlyRegistry{
+        
+    }
 
 }
