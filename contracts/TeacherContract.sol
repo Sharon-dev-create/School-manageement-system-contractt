@@ -10,10 +10,9 @@ contract teacherContract {
 
     // Struct
     struct Teacher{
-        uint256 teacherId;
-        uint256 classId;
-        uint256 gradeSubmitted;
         string teacherName;
+        uint256 studentId;
+        uint256 gradeSubmitted;
         bool isActive;     
     }
 
@@ -51,15 +50,12 @@ contract teacherContract {
     function registerTeacher(address teacherWallet, string calldata name, uint256 subjectId) external onlyRegistry{
         require(teacherWallet != address(0), "Invalid address");
         require(!teachers[teacherWallet].isActive, "Already a teacher");
-
-        teachers[teacherWallet] = Teacher({
-            teacherId: teacherList.length + 1,
-            classId: subjectId,
-            gradeSubmitted: 0,
-            teacherName: name,
-            isActive: true
-        });
-        teacherList.push(teacherWallet);
+            
+            teachers[teacherList] = Teacher({
+                teachername: name,
+                subjectId: subjectId,
+                isActive: true
+            });
     }
 
     // Assign subject and class
