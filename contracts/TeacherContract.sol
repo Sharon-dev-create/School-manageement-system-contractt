@@ -11,15 +11,16 @@ contract teacherContract {
     // Struct
     struct Teacher{
         string teacherName;
-        uint256 studentId;
-        uint256 gradeSubmitted;
+        uint256 subjectId;
+        uint256 registeredAt;
         bool isActive;     
     }
 
     // Events
-    // event for teacherRegistered
-    // event for teacherDeactivated
-    // event for teacherReactivated
+    event TeacherRegistered(address indexed teaherWallet, string name, uint256 subjectId);
+    event TeacherDeactivated(address indexed teacherWallet);
+    event TeacherReactivated(address indexed teacherWallet);
+        // event for teacherReactivated
     // event for subjectAssigned
     // event for attendanceMarked
         
@@ -50,21 +51,41 @@ contract teacherContract {
     function registerTeacher(address teacherWallet, string calldata name, uint256 subjectId) external onlyRegistry{
         require(teacherWallet != address(0), "Invalid address");
         require(!teachers[teacherWallet].isActive, "Already a teacher");
+        require(bytes(name).length > 0, "Empty name");
             
-            teachers[teacherList] = Teacher({
-                teachername: name,
+            teachers[teacherWallet] = Teacher({
+                teacherName: name,
                 subjectId: subjectId,
-                isActive: true
+                isActive: true,
+                registeredAt: block.timestamp
             });
+
+            teacherList.push(teacherWallet);
+
+            emit TeacherRegistered(teacherWallet, name, subjectId);
     }
 
-    // Assign subject and class
-
     // Deactivate teacher
+    function deactivaeTeacher(address teacherWallet) external onlyRegistry{
+        require(teachers[teacherWallet].isActive, "Teacher Not active");
+        teachers[teacherWallet].isActive = false;
+
+        emit TeacherReactivated(teacherWallet);
+    }
 
     // Reactivate teacher
+    function reactivaeTeacher(address teacherWallet) external onlyRegistry{
+        require(!teachers[teacherWallet].isActive, "Teacher is active");
+        require(teachers[teacherWallet].registeredAt > 0, "Teacher not found");
+        teachers[teacherWallet].isActive = true;
+
+        emit TeacherDeactivated(teacherWallet);
+    }
 
     // Mark attendance
+    function markAttendance(address student, bool present, uint256 date) external onlyActiveTeacher {
+        require(student != address(0), "invalid student address")
+    }
 
     // update grades
 
