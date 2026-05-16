@@ -20,9 +20,8 @@ contract teacherContract {
     event TeacherRegistered(address indexed teaherWallet, string name, uint256 subjectId);
     event TeacherDeactivated(address indexed teacherWallet);
     event TeacherReactivated(address indexed teacherWallet);
-        // event for teacherReactivated
-    // event for subjectAssigned
-    // event for attendanceMarked
+    event AttendanceMarked(address indexed teacher, address indexed student,
+     bool present, uint256 date);
         
     // Mappings
     mapping(address => Teacher) public teachers;
@@ -84,7 +83,18 @@ contract teacherContract {
 
     // Mark attendance
     function markAttendance(address student, bool present, uint256 date) external onlyActiveTeacher {
-        require(student != address(0), "invalid student address")
+        require(student != address(0), "invalid student address");
+        require(date <= block.timestamp, "Date cannot be in the future");
+
+        (bool success, ) = studentContract.call(abi.encodeWithSignature(
+            "logAttendance(address, bool, uint256)",
+            student,
+            present,
+            date
+        ));
+        require(success, "Attendance marking failed");
+
+        emit AttendanceMarked(msg.sender, student, present, date);
     }
 
     // update grades
