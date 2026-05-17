@@ -40,6 +40,9 @@ contract studentContract{
 
     // Events
     event StudentEnrolled(address indexed studentWallet, string name, uint256 classId);
+    event StudentGraduated(address indexed studentWallet, string name);
+    event StudentSuspended(address indexed studentWallet, string name);
+    event StudentReactivated(address indexed studentWallet, string name);
 
     // Modifiers
     // only Teacher modifier
@@ -82,6 +85,36 @@ contract studentContract{
          studentList.push(studentWallet);
 
          emit StudentEnrolled(studentWallet, name, classId);
+     }
+
+     function graduateStudent(address studentWallet) external onlyTeacher {
+        require(student[studentWallet].isEnrolled, "Student not enrolled");
+        require(!student[studentWallet].isGraduated, "Already graduated");
+        require(!student[studentWallet].isSuspended, "Student is suspended");
+
+        student[studentWallet].isGraduated = true;
+        
+        emit StudentGraduated(studentWallet, student[studentWallet].name);
+     }
+
+     function suspendStudent(address studentWallet) external onlyTeacher {
+        require(student[studentWallet].isEnrolled, "Student not enrolled");
+        require(!student[studentWallet].isGraduated, "Already graduated");
+        require(!student[studentWallet].isSuspended, "Already suspended");
+
+        student[studentWallet].isSuspended = true;
+
+        emit StudentSuspended(studentWallet, student[studentWallet].name);
+     }
+
+     function reactivateStudent(address studentWallet) external onlyTeacher {
+        require(student[studentWallet].isEnrolled, "Student not enrolled");
+        require(!student[studentWallet].isGraduated, "Already graduated");
+        require(student[studentWallet].isSuspended, "Student is not suspended");
+
+        student[studentWallet].isSuspended = false;
+
+        emit StudentReactivated(studentWallet, student[studentWallet].name);
      }
 
     // Update student info
