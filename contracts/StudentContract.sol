@@ -38,6 +38,9 @@ contract studentContract{
 
     address[] public studentList;
 
+    // Events
+    event StudentEnrolled(address indexed studentWallet, string name, uint256 courseId);
+
     // Modifiers
     // only Teacher modifier
     modifier onlyTeacher(){
@@ -65,9 +68,11 @@ contract studentContract{
          require(studentWallet != address(0), "Invalid address");
          require(bytes(name).length > 0, "Empty name");
 
+         uint256 newStudentId = studentList.length + 1;
+
          student[studentWallet] = Student({
-            studentId: studentId,
-            class: class,
+            studentId: newStudentId,
+            class: courseId,
             name: name,
             isEnrolled: true,
             isGraduated: false,
@@ -76,7 +81,7 @@ contract studentContract{
          
          studentList.push(studentWallet);
 
-         emit StudentEnrolled(address studentWallet, string name, uint256 courseId);
+         emit StudentEnrolled(studentWallet, name, courseId);
      }
 
     // Update student info
