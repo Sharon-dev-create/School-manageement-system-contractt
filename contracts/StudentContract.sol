@@ -3,20 +3,17 @@
 pragma solidity ^0.8.26;
 
 contract studentContract{
+    address public registry;
     // State variables
 
     // Struct
     struct Student{
-        uint256 sudentId;
+        uint256 studentId;
         uint256 class;
-        uint256 grade;
         string name;
         bool isEnrolled;
         bool isGraduated;
         bool isSuspended;
-        bytes32 certificate;
-        AttendanceRecord[] attendance;
-        Result[] results;
     }
     
     struct Result {
@@ -36,14 +33,52 @@ contract studentContract{
 
     // Mapping
     mapping(address => Student) public student;
+    mapping (address => Result[]) public results;
+    mapping(address => AttendanceRecord[]) public attendanceLog;
+
+    address[] public studentList;
 
     // Modifiers
     // only Teacher modifier
+    modifier onlyTeacher(){
+       (bool ok, bytes memory data) = registry.call(
+        abi.encodeWithSignature("isTeacher(address)", msg.sender)
+       );
+       require(ok, "Registry check failed");
+       require(abi.decode(data, (bool)), "Not an active teacher");
+       _;
+    }
 
+    modifier onlyEnrolled(address studentWallet){
+        require(student[studentWallet].isEnrolled, "student not enrolled");
+        _;
+    }
+    
+    constructor(address _registry) {
+        require(_registry != address(0), "Invalid registry");
+         registry = _registry;
+    }
     // Functions
     // Register students
-    // function registerStudent(uint256 _studentId, string memory name,
-    // uint256 class ) public 
+    function enrollStudent(address studentWallet, string calldata name,
+     uint256 courseId) external onlyTeacher{
+         require(studentWallet != address(0), "Invalid address");
+         require(bytes(name).length > 0, "Empty name");
+
+         student[studentWallet] = Student({
+            studentId: studentId,
+            class: class,
+            name: name,
+            isEnrolled: true,
+            isGraduated: false,
+            isSuspended: false
+         });
+         
+         studentList.push(studentWallet);
+
+         emit StudentEnrolled(address studentWallet, string name, uint256 courseId);
+     }
+
     // Update student info
     // Suspend student
     // Return student
