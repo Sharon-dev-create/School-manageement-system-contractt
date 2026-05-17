@@ -117,15 +117,19 @@ contract studentContract{
         emit StudentReactivated(studentWallet, student[studentWallet].name);
      }
 
-    // Update student info
-    // Suspend student
-    // Return student
-    // Reactivate 
-
-
     //Getter Functions
     // Get student info
-    // View grades function
+    function getStudent(address studentWallet) external view returns(Student memory){
+        return student[studentWallet];
+    }
+    
+    function getResults(address studentWallet) external view returns(Result[] memory){
+        return results[studentWallet];
+    }
+
+    function getTotalStudents() external view returns(uint256){
+        return studentList.length;
+    }
     // View attendance function
 
 }
