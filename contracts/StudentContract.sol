@@ -39,7 +39,7 @@ contract studentContract{
     address[] public studentList;
 
     // Events
-    event StudentEnrolled(address indexed studentWallet, string name, uint256 courseId);
+    event StudentEnrolled(address indexed studentWallet, string name, uint256 classId);
 
     // Modifiers
     // only Teacher modifier
@@ -64,7 +64,7 @@ contract studentContract{
     // Functions
     // Register students
     function enrollStudent(address studentWallet, string calldata name,
-     uint256 courseId) external onlyTeacher{
+     uint256 classId) external onlyTeacher{
          require(studentWallet != address(0), "Invalid address");
          require(bytes(name).length > 0, "Empty name");
 
@@ -72,7 +72,7 @@ contract studentContract{
 
          student[studentWallet] = Student({
             studentId: newStudentId,
-            class: courseId,
+            class: classId,
             name: name,
             isEnrolled: true,
             isGraduated: false,
@@ -81,7 +81,7 @@ contract studentContract{
          
          studentList.push(studentWallet);
 
-         emit StudentEnrolled(studentWallet, name, courseId);
+         emit StudentEnrolled(studentWallet, name, classId);
      }
 
     // Update student info
