@@ -67,7 +67,7 @@ contract studentContract{
     // Functions
     // Register students
     function enrollStudent(address studentWallet, string calldata name,
-     uint256 courseId) external {
+     uint256 classId) external {
          require(studentWallet != address(0), "Invalid address");
          require(bytes(name).length > 0, "Empty name");
 
