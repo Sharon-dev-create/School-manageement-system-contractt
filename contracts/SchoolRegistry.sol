@@ -8,6 +8,10 @@ interface ISchoolToken {
     function transfer(address to, uint256 value) external returns (bool);
 }
 
+interface INftReward {
+    function mintReward(address to, string calldata uri) external returns (uint256);
+}
+
 contract SchoolRegistry{
     // State variables
     string public schoolName;
@@ -15,6 +19,7 @@ contract SchoolRegistry{
     address public teacherContract;
     address public studentContract;
     address public tokenContract;
+    address public nftContract;
 
     // Mapping
     mapping(address => bool) public isTeacher;
@@ -25,6 +30,7 @@ contract SchoolRegistry{
     event TeacherDeactivated(address indexed teacherWallet);
     event StudentEnrolled(address indexed studentWallet, uint256 courseId);
     event TokenRewarded(address indexed to, uint256 amount);
+    event NftRewarded(address indexed to, uint256 indexed tokenId, string uri);
     event SchoolNameUpdated(string schoolName);
     
     // Modifiers
@@ -111,11 +117,27 @@ contract SchoolRegistry{
         tokenContract = _address;
     }
 
+    function setNftContract(address _address) external onlyAdmin{
+        require(_address != address(0), "Invalid contract");
+        nftContract = _address;
+    }
+
     function rewardStudent(address studentWallet, uint256 amount) external onlyAdmin{
         require(studentWallet != address(0), "Invalid address");
         require(tokenContract != address(0), "Token not set");
 
         ISchoolToken(tokenContract).mint(studentWallet, amount);
         emit TokenRewarded(studentWallet, amount);
+    }
+
+    function rewardStudentNft(address studentWallet, string calldata uri) external onlyAdmin returns (uint256) {
+        require(studentWallet != address(0), "Invalid address");
+        require(isStudent[studentWallet], "Student not enrolled");
+        require(nftContract != address(0), "NFT contract not set");
+        require(bytes(uri).length > 0, "Empty token URI");
+
+        uint256 tokenId = INftReward(nftContract).mintReward(studentWallet, uri);
+        emit NftRewarded(studentWallet, tokenId, uri);
+        return tokenId;
     }
 }
