@@ -82,7 +82,7 @@ contract SchoolRegistry{
 
     function enrollStudent(uint256 courseId, address studentWallet, string calldata name) external onlyAdmin{
         require(studentWallet != address(0), "Invalid address");
-        require(isStudent[studentWallet], "Already enrolled");
+        require(!isStudent[studentWallet], "Already enrolled");
 
         (bool success, ) = studentContract.call(abi.encodeWithSignature(
             "enrollStudent(address, string, uint256)",
