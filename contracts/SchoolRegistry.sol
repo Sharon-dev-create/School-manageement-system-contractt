@@ -2,12 +2,19 @@
 
 pragma solidity ^0.8.26;
 
+interface ISchoolToken {
+    function mint(address to, uint256 value) external;
+    function burn(address from, uint256 value) external;
+    function transfer(address to, uint256 value) external returns (bool);
+}
+
 contract SchoolRegistry{
     // State variables
     string public schoolName;
     address public admin;
     address public teacherContract;
     address public studentContract;
+    address public tokenContract;
 
     // Mapping
     mapping(address => bool) public isTeacher;
@@ -17,6 +24,7 @@ contract SchoolRegistry{
     event TeacherRegistered(address indexed teacherWallet, uint256 subjectId);
     event TeacherDeactivated(address indexed teacherWallet);
     event StudentEnrolled(address indexed studentWallet, uint256 courseId);
+    event TokenRewarded(address indexed to, uint256 amount);
     event SchoolNameUpdated(string schoolName);
     
     // Modifiers
@@ -96,5 +104,18 @@ contract SchoolRegistry{
     function setStudentContract(address _address) external onlyAdmin{
         require(_address != address(0), "Invalid contract");
         studentContract = _address;
+    }
+
+    function setTokenContract(address _address) external onlyAdmin{
+        require(_address != address(0), "Invalid contract");
+        tokenContract = _address;
+    }
+
+    function rewardStudent(address studentWallet, uint256 amount) external onlyAdmin{
+        require(studentWallet != address(0), "Invalid address");
+        require(tokenContract != address(0), "Token not set");
+
+        ISchoolToken(tokenContract).mint(studentWallet, amount);
+        emit TokenRewarded(studentWallet, amount);
     }
 }
